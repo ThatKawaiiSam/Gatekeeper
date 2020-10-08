@@ -1,0 +1,4 @@
+name: Gatekeeper
+version: 1.0-SNAPSHOT
+author: ThatKawaiiSam
+main: io.github.thatkawaiisam.gatekeeper.GatekeeperPlugin
