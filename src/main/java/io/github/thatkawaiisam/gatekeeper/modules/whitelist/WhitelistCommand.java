@@ -9,6 +9,7 @@ import com.google.gson.JsonParser;
 import io.github.thatkawaiisam.plugintemplate.bungee.BungeeModuleCommand;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.CommandSender;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -38,14 +39,26 @@ public class WhitelistCommand extends BungeeModuleCommand<WhitelistModule> {
     @CommandPermission("Gatekeeper.Admin")
     public void whitelistOn(CommandSender sender) {
         getModule().setMode(WhitelistMode.ON);
-        sender.sendMessage(ChatColor.GREEN + "Network whitelist is now on.");
+
+        // Send message to staff on network.
+        for (ProxiedPlayer player : getModule().getPlugin().getProxy().getPlayers()) {
+            if (player.hasPermission("Gatekeeper.Admin")) {
+                player.sendMessage(ChatColor.GREEN + "[Gatekeeper] Network whitelist is now on.");
+            }
+        }
     }
 
     @Subcommand("whitelist off")
     @CommandPermission("Gatekeeper.Admin")
     public void whitelistOff(CommandSender sender) {
         getModule().setMode(WhitelistMode.OFF);
-        sender.sendMessage(ChatColor.RED + "Network whitelist is now off.");
+
+        // Send message to staff on network.
+        for (ProxiedPlayer player : getModule().getPlugin().getProxy().getPlayers()) {
+            if (player.hasPermission("Gatekeeper.Admin")) {
+                player.sendMessage(ChatColor.RED + "[Gatekeeper] Network whitelist is now off.");
+            }
+        }
     }
 
     @Subcommand("whitelist add")
@@ -57,7 +70,13 @@ public class WhitelistCommand extends BungeeModuleCommand<WhitelistModule> {
                 return;
             }
             getModule().getWhitelisted().add(uuid);
-            sender.sendMessage(ChatColor.GREEN + "Added " + target + " to the whitelist.");
+
+            // Send message to staff on network.
+            for (ProxiedPlayer player : getModule().getPlugin().getProxy().getPlayers()) {
+                if (player.hasPermission("Gatekeeper.Admin")) {
+                    player.sendMessage(ChatColor.GREEN + "[Gatekeeper] " + target + " has been added to the whitelisted.");
+                }
+            }
         }));
     }
 
@@ -74,7 +93,13 @@ public class WhitelistCommand extends BungeeModuleCommand<WhitelistModule> {
                 return;
             }
             getModule().getWhitelisted().remove(uuid);
-            sender.sendMessage(ChatColor.RED + "Removed " + target + " from the whitelist.");
+
+            // Send message to staff on network.
+            for (ProxiedPlayer player : getModule().getPlugin().getProxy().getPlayers()) {
+                if (player.hasPermission("Gatekeeper.Admin")) {
+                    player.sendMessage(ChatColor.RED + "[Gatekeeper] " + target + " has been removed to the whitelisted.");
+                }
+            }
         }));
     }
 
